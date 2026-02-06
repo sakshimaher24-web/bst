@@ -1,0 +1,136 @@
+/* ---------- THEME VARIABLES ---------- */
+:root {
+    --bg-color: #f5f5f5;
+    --text-color: #333333;
+    --card-bg: #ffffff;
+    --canvas-bg: #ededed;
+    --border-color: #dddddd;
+    --accent: #7da6ff;
+}
+
+body.dark {
+    --bg-color: #121212;
+    --text-color: #e6e6e6;
+    --card-bg: #1e1e1e;
+    --canvas-bg: #1a1a1a;
+    --border-color: #333333;
+    --accent: #8fa8ff;
+}
+
+/* ---------- BASE ---------- */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+h1 {
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* ---------- INPUT AREA ---------- */
+.input-area {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+input[type="text"] {
+    width: 260px;
+    padding: 10px 15px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    font-size: 16px;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+#nodesInput {
+    width: 400px;
+}
+
+input[type="text"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(125, 166, 255, 0.3);
+}
+
+/* ---------- BUTTONS ---------- */
+button {
+    padding: 10px 22px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+}
+
+button.primary {
+    background-color: var(--accent);
+    color: #ffffff;
+    border: none;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    background-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* Dark mode button refinement */
+body.dark button:not(.primary) {
+    background-color: #242424;
+    border: 1px solid #333333;
+}
+
+/* ---------- CANVAS ---------- */
+#bstCanvas {
+    background-color: var(--canvas-bg);
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    margin-bottom: 30px;
+    transition: background-color 0.3s ease;
+}
+
+/* ---------- OUTPUT ---------- */
+.output p {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin: 8px auto;
+    width: fit-content;
+    max-width: 90%;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* ---------- TOGGLE BUTTON ---------- */
+#themeToggle {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BST Visualizer</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>BST Visualizer</h1>
+      <button id="themeToggle">🌙 Dark Mode</button>
+    </div>
+
+    <!-- Build BST -->
+    <div class="input-area">
+      <input type="text" id="nodesInput" placeholder="Enter numbers (79,15,100)" />
+      <button class="primary" onclick="buildBST()">Build BST</button>
+      <button onclick="deleteTree()">Delete Tree</button>
+    </div>
+
+    <!-- Search -->
+    <div class="input-area">
+      <input type="text" id="searchInput" placeholder="Search number" />
+      <button class="primary" onclick="searchNode()">Search</button>
+    </div>
+
+    <!-- Canvas -->
+    <canvas id="bstCanvas" width="1000" height="500"></canvas>
+
+    <!-- Output -->
+    <div class="output">
+      <p><strong>Inorder:</strong> <span id="inorder"></span></p>
+      <p><strong>Preorder:</strong> <span id="preorder"></span></p>
+      <p><strong>Postorder:</strong> <span id="postorder"></span></p>
+      <p><strong>Total Nodes:</strong> <span id="totalNodes"></span></p>
+      <p><strong>Leaf Nodes:</strong> <span id="leafNodes"></span></p>
+      <p><strong>Height:</strong> <span id="height"></span></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
