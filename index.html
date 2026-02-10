@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BST Visualizer</title>
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
+  <!-- Dark mode toggle -->
+  <button id="themeToggle" class="toggle primary">🌙 Dark Mode</button>
+
   <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <h1>BST Visualizer</h1>
-      <button id="themeToggle">🌙 Dark Mode</button>
-    </div>
+    <h1>BST Visualizer</h1>
 
     <!-- Build BST -->
     <div class="input-area">
-      <input type="text" id="nodesInput" placeholder="Enter numbers 79,15,100" />
+      <input type="text" id="nodesInput" placeholder="Enter numbers, e.g., 79,15,100">
       <button class="primary" onclick="buildBST()">Build BST</button>
       <button onclick="deleteTree()">Delete Tree</button>
     </div>
 
     <!-- Search -->
     <div class="input-area">
-      <input type="text" id="searchInput" placeholder="Search number" />
+      <input type="text" id="searchInput" placeholder="Search number">
       <button class="primary" onclick="searchNode()">Search</button>
     </div>
 
     <!-- Canvas -->
-    <canvas id="bstCanvas" width="1000" height="500"></canvas>
+    <div class="canvas-wrapper">
+      <canvas id="bstCanvas" width="1000" height="500"></canvas>
+    </div>
 
     <!-- Output -->
     <div class="output">
@@ -46,4 +47,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
