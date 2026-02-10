@@ -1,4 +1,3 @@
-
 /* ================== NODE ================== */
 class Node {
     constructor(value) {
@@ -83,12 +82,17 @@ const ctx = canvas.getContext("2d");
 
 const bst = new BST();
 const nodePositions = new Map();
+let highlightValue = null;
 
-/* ================== DRAW ================== */
+/* ================== UTILS ================== */
+function getTreeHeight(root) {
+    if (!root) return 0;
+    return 1 + Math.max(getTreeHeight(root.left), getTreeHeight(root.right));
+}
+
+/* ================== DRAW TREE ================== */
 function drawTree(node, x, y, gap) {
     if (!node) return;
-
-    const animatedY = y + node.yOffset;
 
     // animation update
     if (node.yOffset < 0) node.yOffset += 2;
@@ -96,6 +100,8 @@ function drawTree(node, x, y, gap) {
 
     node.yOffset = Math.min(node.yOffset, 0);
     node.opacity = Math.min(node.opacity, 1);
+
+    const animatedY = y + node.yOffset;
 
     ctx.globalAlpha = node.opacity;
 
@@ -105,7 +111,7 @@ function drawTree(node, x, y, gap) {
 
     if (node.left) {
         ctx.beginPath();
-        ctx.moveTo(x, animatedY);
+        ctx.moveTo(x, animatedY + 22);
         ctx.lineTo(x - gap, y + 80);
         ctx.stroke();
         drawTree(node.left, x - gap, y + 80, gap / 1.6);
@@ -113,13 +119,13 @@ function drawTree(node, x, y, gap) {
 
     if (node.right) {
         ctx.beginPath();
-        ctx.moveTo(x, animatedY);
+        ctx.moveTo(x, animatedY + 22);
         ctx.lineTo(x + gap, y + 80);
         ctx.stroke();
         drawTree(node.right, x + gap, y + 80, gap / 1.6);
     }
 
-    // node
+    // node circle
     ctx.beginPath();
     ctx.arc(x, animatedY, 22, 0, Math.PI * 2);
     ctx.fillStyle = "#7DA6FF";
@@ -127,7 +133,17 @@ function drawTree(node, x, y, gap) {
     ctx.strokeStyle = "#444";
     ctx.stroke();
 
-    ctx.fillStyle = "#fff";
+    // highlight
+    if (node.value === highlightValue) {
+        ctx.beginPath();
+        ctx.arc(x, animatedY, 26, 0, Math.PI * 2);
+        ctx.strokeStyle = "#FFB347";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+    }
+
+    // text
+    ctx.fillStyle = "#ffffff";
     ctx.font = "14px Poppins";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -157,6 +173,12 @@ function buildBST() {
         .filter(v => !isNaN(v));
 
     bst.build(values);
+    highlightValue = null;
+
+    // auto resize canvas
+    const h = getTreeHeight(bst.root);
+    canvas.height = Math.max(500, h * 100);
+
     updateInfo();
 }
 
@@ -165,20 +187,16 @@ function searchNode() {
     if (isNaN(val)) return;
 
     if (nodePositions.has(val)) {
-        const p = nodePositions.get(val);
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 26, 0, Math.PI * 2);
-        ctx.strokeStyle = "#FFB347";
-        ctx.lineWidth = 4;
-        ctx.stroke();
+        highlightValue = val;
     } else {
         alert("Value not found");
+        highlightValue = null;
     }
 }
 
 function deleteTree() {
     bst.root = null;
+    highlightValue = null;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     nodePositions.clear();
     document.querySelectorAll(".output span").forEach(s => s.textContent = "");
