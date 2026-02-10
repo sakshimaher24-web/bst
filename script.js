@@ -8,6 +8,10 @@ class Node {
         // animation
         this.yOffset = -25;
         this.opacity = 0;
+
+        // search animation
+        this.isVisited = false;
+        this.isFound = false;
     }
 }
 
@@ -33,6 +37,16 @@ class BST {
         values.forEach(v => {
             this.root = this.insert(this.root, v);
         });
+    }
+
+    search(root, value, path = []) {
+        if (!root) return path;
+
+        path.push(root);
+
+        if (root.value === value) return path;
+        if (value < root.value) return this.search(root.left, value, path);
+        return this.search(root.right, value, path);
     }
 
     inorder(root, res = []) {
@@ -81,20 +95,12 @@ const canvas = document.getElementById("bstCanvas");
 const ctx = canvas.getContext("2d");
 
 const bst = new BST();
-const nodePositions = new Map();
-let highlightValue = null;
-
-/* ================== UTILS ================== */
-function getTreeHeight(root) {
-    if (!root) return 0;
-    return 1 + Math.max(getTreeHeight(root.left), getTreeHeight(root.right));
-}
 
 /* ================== DRAW TREE ================== */
 function drawTree(node, x, y, gap) {
     if (!node) return;
 
-    // animation update
+    // animation
     if (node.yOffset < 0) node.yOffset += 2;
     if (node.opacity < 1) node.opacity += 0.05;
 
@@ -105,7 +111,7 @@ function drawTree(node, x, y, gap) {
 
     ctx.globalAlpha = node.opacity;
 
-    // lines
+    // edges
     ctx.strokeStyle = "#888";
     ctx.lineWidth = 2;
 
@@ -125,39 +131,30 @@ function drawTree(node, x, y, gap) {
         drawTree(node.right, x + gap, y + 80, gap / 1.6);
     }
 
-    // node circle
+    // node color
+    let color = "#7DA6FF";
+    if (node.isVisited) color = "#FFD966";
+    if (node.isFound) color = "#4CAF50";
+
     ctx.beginPath();
     ctx.arc(x, animatedY, 22, 0, Math.PI * 2);
-    ctx.fillStyle = "#7DA6FF";
+    ctx.fillStyle = color;
     ctx.fill();
     ctx.strokeStyle = "#444";
     ctx.stroke();
 
-    // highlight
-    if (node.value === highlightValue) {
-        ctx.beginPath();
-        ctx.arc(x, animatedY, 26, 0, Math.PI * 2);
-        ctx.strokeStyle = "#FFB347";
-        ctx.lineWidth = 4;
-        ctx.stroke();
-    }
-
-    // text
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = "#fff";
     ctx.font = "14px Poppins";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(node.value, x, animatedY);
 
     ctx.globalAlpha = 1;
-
-    nodePositions.set(node.value, { x, y: animatedY });
 }
 
 /* ================== ANIMATION LOOP ================== */
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    nodePositions.clear();
     drawTree(bst.root, canvas.width / 2, 50, 140);
     requestAnimationFrame(animate);
 }
@@ -173,10 +170,9 @@ function buildBST() {
         .filter(v => !isNaN(v));
 
     bst.build(values);
-    highlightValue = null;
+    resetSearch(bst.root);
 
-    // auto resize canvas
-    const h = getTreeHeight(bst.root);
+    const h = bst.height(bst.root);
     canvas.height = Math.max(500, h * 100);
 
     updateInfo();
@@ -184,21 +180,39 @@ function buildBST() {
 
 function searchNode() {
     const val = parseInt(document.getElementById("searchInput").value);
-    if (isNaN(val)) return;
+    if (isNaN(val)) return alert("Enter a number");
 
-    if (nodePositions.has(val)) {
-        highlightValue = val;
+    resetSearch(bst.root);
+
+    const path = bst.search(bst.root, val);
+    if (!path.length || path[path.length - 1].value !== val) {
+        animateSearch(path, null);
+        setTimeout(() => alert("Value not found"), path.length * 600);
     } else {
-        alert("Value not found");
-        highlightValue = null;
+        animateSearch(path, path[path.length - 1]);
     }
+}
+
+function animateSearch(path, foundNode) {
+    path.forEach((node, i) => {
+        setTimeout(() => {
+            node.isVisited = true;
+            if (node === foundNode) node.isFound = true;
+        }, i * 600);
+    });
+}
+
+function resetSearch(root) {
+    if (!root) return;
+    root.isVisited = false;
+    root.isFound = false;
+    resetSearch(root.left);
+    resetSearch(root.right);
 }
 
 function deleteTree() {
     bst.root = null;
-    highlightValue = null;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    nodePositions.clear();
     document.querySelectorAll(".output span").forEach(s => s.textContent = "");
 }
 
