@@ -1,9 +1,21 @@
-body {
-    font-family: Poppins, sans-serif;
-    background: #f4f6fb;
-    color: #222;
+/* ===== RESET ===== */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+}
+
+/* ===== BODY ===== */
+body {
+    background: #f4f6fb;
+    color: #222;
+    display: flex;
+    justify-content: center;   /* CENTER HORIZONTALLY */
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+    transition: 0.3s ease;
 }
 
 body.dark {
@@ -11,37 +23,98 @@ body.dark {
     color: #eee;
 }
 
+/* ===== MAIN CONTAINER ===== */
+.container {
+    width: 100%;
+    max-width: 1100px;
+    text-align: center;
+}
+
+/* ===== TITLE ===== */
+h1 {
+    margin-bottom: 25px;
+    font-size: 2.5rem;
+}
+
+/* ===== INPUT AREA ===== */
+.input-area {
+    margin-bottom: 15px;
+}
+
+input {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 250px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+body.dark input {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    color: white;
+}
+
+/* ===== BUTTONS ===== */
+button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    transition: 0.3s ease;
+    font-weight: 500;
+    background: #7DA6FF;
+    color: #fff;
+}
+
+button.primary {
+    background: #6c8cff;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+body.dark button.primary {
+    background: #4a6cf7;
+}
+
+/* ===== TOGGLE BUTTON ===== */
+.toggle {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+/* ===== CANVAS WRAPPER ===== */
+.canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
 canvas {
-    display: block;
-    margin: 20px auto;
     background: #ffffff;
-    border-radius: 12px;
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 100%;
 }
 
 body.dark canvas {
     background: #1e1e1e;
 }
 
-button {
-    padding: 10px 16px;
-    margin: 6px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #7DA6FF;
-    color: #fff;
-    font-weight: 500;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-input {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    margin: 5px;
+/* ===== OUTPUT SECTION ===== */
+.output {
+    margin-top: 30px;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
 }
 
 .output span {
