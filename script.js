@@ -5,7 +5,7 @@ class Node {
         this.left = null;
         this.right = null;
 
-        // animation
+        // animation properties
         this.yOffset = -25;
         this.opacity = 0;
 
@@ -26,16 +26,18 @@ class BST {
 
         if (value < root.value) {
             root.left = this.insert(root.left, value);
-        } else if (value > root.value) {
+        } 
+        else if (value > root.value) {
             root.right = this.insert(root.right, value);
         }
+        // duplicates ignored
         return root;
     }
 
     build(values) {
         this.root = null;
-        values.forEach(v => {
-            this.root = this.insert(this.root, v);
+        values.forEach(value => {
+            this.root = this.insert(this.root, value);
         });
     }
 
@@ -45,32 +47,33 @@ class BST {
         path.push(root);
 
         if (root.value === value) return path;
-        if (value < root.value) return this.search(root.left, value, path);
+        if (value < root.value)
+            return this.search(root.left, value, path);
         return this.search(root.right, value, path);
     }
 
-    inorder(root, res = []) {
-        if (!root) return res;
-        this.inorder(root.left, res);
-        res.push(root.value);
-        this.inorder(root.right, res);
-        return res;
+    inorder(root, result = []) {
+        if (!root) return result;
+        this.inorder(root.left, result);
+        result.push(root.value);
+        this.inorder(root.right, result);
+        return result;
     }
 
-    preorder(root, res = []) {
-        if (!root) return res;
-        res.push(root.value);
-        this.preorder(root.left, res);
-        this.preorder(root.right, res);
-        return res;
+    preorder(root, result = []) {
+        if (!root) return result;
+        result.push(root.value);
+        this.preorder(root.left, result);
+        this.preorder(root.right, result);
+        return result;
     }
 
-    postorder(root, res = []) {
-        if (!root) return res;
-        this.postorder(root.left, res);
-        this.postorder(root.right, res);
-        res.push(root.value);
-        return res;
+    postorder(root, result = []) {
+        if (!root) return result;
+        this.postorder(root.left, result);
+        this.postorder(root.right, result);
+        result.push(root.value);
+        return result;
     }
 
     countNodes(root) {
@@ -90,10 +93,9 @@ class BST {
     }
 }
 
-/* ================== CANVAS ================== */
+/* ================== INITIAL SETUP ================== */
 const canvas = document.getElementById("bstCanvas");
 const ctx = canvas.getContext("2d");
-
 const bst = new BST();
 
 /* ================== DRAW TREE ================== */
@@ -101,17 +103,13 @@ function drawTree(node, x, y, gap) {
     if (!node) return;
 
     // animation
-    if (node.yOffset < 0) node.yOffset += 2;
-    if (node.opacity < 1) node.opacity += 0.05;
-
-    node.yOffset = Math.min(node.yOffset, 0);
-    node.opacity = Math.min(node.opacity, 1);
+    node.yOffset = Math.min(node.yOffset + 2, 0);
+    node.opacity = Math.min(node.opacity + 0.05, 1);
 
     const animatedY = y + node.yOffset;
-
     ctx.globalAlpha = node.opacity;
 
-    // edges
+    // draw edges
     ctx.strokeStyle = "#888";
     ctx.lineWidth = 2;
 
@@ -131,7 +129,7 @@ function drawTree(node, x, y, gap) {
         drawTree(node.right, x + gap, y + 80, gap / 1.6);
     }
 
-    // node color
+    // node color logic
     let color = "#7DA6FF";
     if (node.isVisited) color = "#FFD966";
     if (node.isFound) color = "#4CAF50";
@@ -161,44 +159,63 @@ function animate() {
 
 /* ================== CONTROLS ================== */
 function buildBST() {
-    const input = document.getElementById("nodesInput").value;
-    if (!input) return alert("Enter numbers");
+    const input = document.getElementById("nodesInput").value.trim();
+    if (!input) {
+        alert("Please enter numbers separated by commas");
+        return;
+    }
 
     const values = input
         .split(",")
         .map(v => parseInt(v.trim()))
         .filter(v => !isNaN(v));
 
+    if (!values.length) {
+        alert("Invalid input");
+        return;
+    }
+
     bst.build(values);
     resetSearch(bst.root);
 
-    const h = bst.height(bst.root);
-    canvas.height = Math.max(500, h * 100);
+    const treeHeight = bst.height(bst.root);
+    canvas.height = Math.max(500, (treeHeight + 2) * 100);
 
     updateInfo();
 }
 
 function searchNode() {
-    const val = parseInt(document.getElementById("searchInput").value);
-    if (isNaN(val)) return alert("Enter a number");
+    const value = parseInt(document.getElementById("searchInput").value);
+    if (isNaN(value)) {
+        alert("Enter a valid number");
+        return;
+    }
+
+    if (!bst.root) {
+        alert("Tree is empty");
+        return;
+    }
 
     resetSearch(bst.root);
 
-    const path = bst.search(bst.root, val);
-    if (!path.length || path[path.length - 1].value !== val) {
-        animateSearch(path, null);
+    const path = bst.search(bst.root, value);
+    const found = path.length && path[path.length - 1].value === value
+        ? path[path.length - 1]
+        : null;
+
+    animateSearch(path, found);
+
+    if (!found) {
         setTimeout(() => alert("Value not found"), path.length * 600);
-    } else {
-        animateSearch(path, path[path.length - 1]);
     }
 }
 
 function animateSearch(path, foundNode) {
-    path.forEach((node, i) => {
+    path.forEach((node, index) => {
         setTimeout(() => {
             node.isVisited = true;
             if (node === foundNode) node.isFound = true;
-        }, i * 600);
+        }, index * 600);
     });
 }
 
@@ -213,16 +230,30 @@ function resetSearch(root) {
 function deleteTree() {
     bst.root = null;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.querySelectorAll(".output span").forEach(s => s.textContent = "");
+
+    document.getElementById("inorder").textContent = "";
+    document.getElementById("preorder").textContent = "";
+    document.getElementById("postorder").textContent = "";
+    document.getElementById("totalNodes").textContent = "";
+    document.getElementById("leafNodes").textContent = "";
+    document.getElementById("height").textContent = "";
 }
 
 function updateInfo() {
-    document.getElementById("inorder").textContent = bst.inorder(bst.root).join(", ");
-    document.getElementById("preorder").textContent = bst.preorder(bst.root).join(", ");
-    document.getElementById("postorder").textContent = bst.postorder(bst.root).join(", ");
-    document.getElementById("totalNodes").textContent = bst.countNodes(bst.root);
-    document.getElementById("leafNodes").textContent = bst.countLeaves(bst.root);
-    document.getElementById("height").textContent = bst.height(bst.root);
+    if (!bst.root) return;
+
+    document.getElementById("inorder").textContent =
+        bst.inorder(bst.root).join(", ");
+    document.getElementById("preorder").textContent =
+        bst.preorder(bst.root).join(", ");
+    document.getElementById("postorder").textContent =
+        bst.postorder(bst.root).join(", ");
+    document.getElementById("totalNodes").textContent =
+        bst.countNodes(bst.root);
+    document.getElementById("leafNodes").textContent =
+        bst.countLeaves(bst.root);
+    document.getElementById("height").textContent =
+        bst.height(bst.root);
 }
 
 /* ================== DARK MODE ================== */
@@ -230,6 +261,7 @@ const toggleBtn = document.getElementById("themeToggle");
 
 toggleBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark");
+
     toggleBtn.textContent =
         document.body.classList.contains("dark")
             ? "☀️ Light Mode"
