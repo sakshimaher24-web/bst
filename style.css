@@ -34,6 +34,14 @@ h1 {
     text-align: center;
 }
 
+.subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+
 /* ===== TABS ===== */
 .tabs {
     display: flex;
@@ -207,3 +215,4 @@ body.dark .output {
 .output span {
     font-weight: 600;
 }
+
