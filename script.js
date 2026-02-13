@@ -255,6 +255,37 @@ function updateInfo() {
     document.getElementById("height").textContent =
         bst.height(bst.root);
 }
+/* ================== TAB SWITCHING ================== */
+function openTab(tabName, event) {
+
+    // Hide all tab contents
+    document.querySelectorAll(".tab-content").forEach(tab => {
+        tab.classList.remove("active");
+    });
+
+    // Remove active from all buttons
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    // Show selected tab
+    const selectedTab = document.getElementById(tabName);
+    if (selectedTab) {
+        selectedTab.classList.add("active");
+
+        // Smooth scroll to section
+        selectedTab.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+
+    // Highlight clicked button
+    if (event) {
+        event.currentTarget.classList.add("active");
+    }
+}
+
 
 /* ================== DARK MODE ================== */
 const toggleBtn = document.getElementById("themeToggle");
@@ -270,3 +301,4 @@ toggleBtn.addEventListener("click", () => {
 
 /* ================== START ================== */
 animate();
+
