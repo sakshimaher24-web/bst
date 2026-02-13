@@ -3,38 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BST Visualizer</title>
+  <title>BST Learning Platform</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- Dark mode toggle -->
-  <button id="themeToggle" class="toggle primary">🌙 Dark Mode</button>
+<button id="themeToggle" class="toggle primary">🌙 Dark Mode</button>
 
-  <div class="container">
+<div class="container">
 
-    <h1>BST Visualizer</h1>
+  <h1>Binary Search Tree Learning Platform</h1>
 
-    <!-- Build BST -->
+  <!-- ===== TABS ===== -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="openTab('visualizer', event)">Visualizer</button>
+    <button class="tab-btn" onclick="openTab('theory', event)">Theory</button>
+    <button class="tab-btn" onclick="openTab('algorithms', event)">Algorithms</button>
+  </div>
+
+  <!-- ================= VISUALIZER TAB ================= -->
+  <div id="visualizer" class="tab-content active">
+
     <div class="input-area">
-      <input type="text" id="nodesInput" placeholder="Enter numbers, e.g., 79,15,100">
+      <input type="text" id="nodesInput" placeholder="Enter numbers e.g. 79,15,100">
       <button class="primary" onclick="buildBST()">Build BST</button>
       <button onclick="deleteTree()">Delete Tree</button>
     </div>
 
-    <!-- Search -->
     <div class="input-area">
       <input type="text" id="searchInput" placeholder="Search number">
       <button class="primary" onclick="searchNode()">Search</button>
     </div>
 
-    <!-- Canvas -->
     <div class="canvas-wrapper">
       <canvas id="bstCanvas" width="1000" height="500"></canvas>
     </div>
 
-    <!-- Output -->
     <div class="output">
       <p><strong>Inorder:</strong> <span id="inorder"></span></p>
       <p><strong>Preorder:</strong> <span id="preorder"></span></p>
@@ -46,6 +51,111 @@
 
   </div>
 
-  <script src="script.js"></script>
+  <!-- ================= THEORY TAB ================= -->
+  <div id="theory" class="tab-content">
+
+    <h2>1. Introduction</h2>
+    <p>
+      A Binary Search Tree (BST) is a hierarchical data structure in which
+      each node contains a unique key and follows an ordering property.
+    </p>
+
+    <ul>
+      <li>Left subtree contains values smaller than the node.</li>
+      <li>Right subtree contains values greater than the node.</li>
+      <li>Duplicate values are generally not allowed.</li>
+    </ul>
+
+    <h2>2. Height & Complexity</h2>
+    <ul>
+      <li>Average Height (Balanced): O(log n)</li>
+      <li>Worst Case Height (Skewed): O(n)</li>
+      <li>Search / Insert / Delete → Average: O(log n)</li>
+      <li>Worst Case → O(n)</li>
+    </ul>
+
+    <h2>3. Traversals</h2>
+
+    <h3>Inorder (Left → Root → Right)</h3>
+    <p>Produces sorted output in a BST.</p>
+
+    <h3>Preorder (Root → Left → Right)</h3>
+    <p>Used for copying tree structure.</p>
+
+    <h3>Postorder (Left → Right → Root)</h3>
+    <p>Used for deleting trees safely.</p>
+
+    <h3>Level Order</h3>
+    <p>Traverses nodes level by level using a queue.</p>
+
+    <h2>4. Applications</h2>
+    <ul>
+      <li>Database indexing</li>
+      <li>Symbol tables</li>
+      <li>Range queries</li>
+      <li>Dynamic data sorting</li>
+      <li>Foundation for AVL & Red-Black Trees</li>
+    </ul>
+
+    <h2>5. Advantages</h2>
+    <ul>
+      <li>Efficient searching in balanced trees</li>
+      <li>Maintains sorted structure</li>
+      <li>Efficient min and max retrieval</li>
+    </ul>
+
+    <h2>6. Disadvantages</h2>
+    <ul>
+      <li>Not self-balancing</li>
+      <li>Can degrade to O(n) in worst case</li>
+      <li>Extra memory for pointers</li>
+    </ul>
+
+  </div>
+
+  <!-- ================= ALGORITHMS TAB ================= -->
+  <div id="algorithms" class="tab-content">
+
+    <h2>Insertion (Recursive)</h2>
+<pre><code>
+function insert(node, key):
+    if node is null:
+        return new Node(key)
+
+    if key < node.value:
+        node.left = insert(node.left, key)
+    else:
+        node.right = insert(node.right, key)
+
+    return node
+</code></pre>
+
+    <h2>Search</h2>
+<pre><code>
+function search(node, key):
+    if node is null:
+        return null
+
+    if key == node.value:
+        return node
+
+    if key < node.value:
+        return search(node.left, key)
+    else:
+        return search(node.right, key)
+</code></pre>
+
+    <h2>Deletion Cases</h2>
+    <ul>
+      <li>No child → remove directly</li>
+      <li>One child → replace with child</li>
+      <li>Two children → replace with inorder successor</li>
+    </ul>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
